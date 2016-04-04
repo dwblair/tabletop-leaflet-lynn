@@ -19,12 +19,13 @@ var lat_column = 'latitude';
 var long_column = 'longitude';
 
 // Marker options
-var radius = 8;
+var radius = 10;
 // Regular fill
-var fill_color = "#023858";
+// var fill_color = "#023858";
+var fill_color = 'red';
 var border_color = "#FFF";
 // Hover
-var fill_color_hover = "#FFF";
+var fill_color_hover = 'blue';
 var border_color_hover = "#333"
 
 var global_markers_data;
@@ -72,7 +73,9 @@ function loadMarkersToMap(markers_data) {
 		// Options for our circle marker
 		var layer_marker = L.circleMarker(marker_location, {
 			radius: radius,
-			fillColor: fill_color,
+			//fillColor: fill_color,
+                        //fillColor: current['color'],
+			fillColor: getColor(current['category']),
 			color: border_color,
 			weight: 1,
 			opacity: 1,
@@ -86,6 +89,7 @@ function loadMarkersToMap(markers_data) {
 		(function (num){
 			// Must call separate popup(e) function to make sure right data is shown
 			function mouseOver(e) {
+				current = markers_data[num];
 				var layer_marker = e.target;
 		        layer_marker.setStyle({
 		            radius: radius + 1,
@@ -100,10 +104,12 @@ function loadMarkersToMap(markers_data) {
 
 		    // What happens when mouse leaves the marker
 		    function mouseOut(e) {
+				current = markers_data[num];
 				var layer_marker = e.target;
 				layer_marker.setStyle({
 					radius: radius + 1,
-					fillColor: fill_color,
+					//fillColor: fill_color,
+					fillColor: getColor(current['category']),
 					color: border_color,
 					weight: 1,
 					opacity: 1,
@@ -141,6 +147,43 @@ function initializeTabletopObjectMarkers(){
     });
 }
 
+
+function getColor(d) {
+    return d == 'restaurant' ? 'red' :
+           d == 'grocery' ? 'green' :
+           d == 'school' ? 'blue' :
+           d == 'farmers market' ? 'yellow' :
+           d == 'csa pickup'  ? 'purple' :
+           d == 'vending machine'  ? '#FEB24C' :
+           d == 'elderly housing'  ? '#FED976' :
+                      '#FFEDA0';
+}
+
+
+var legend = L.control({position: 'bottomleft'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = ['restaurant', 'grocery', 'school', 'farmers market', 'csa pickup', 'vending machine', 'elderly housing'],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '<br>' : '');
+    }
+
+    return div;
+};
+
+
+
+//legend.addTo(map);
 // Add JSON data to map
 // If not done with map-tabletop-geojson.js
 initializeTabletopObjectMarkers();
+
+legend.addTo(map);
+
