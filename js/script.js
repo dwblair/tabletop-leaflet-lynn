@@ -187,3 +187,7 @@ initializeTabletopObjectMarkers();
 
 legend.addTo(map);
 
+var track = new L.KML("./kml/fpz.kml", {async: true});
+//track.on("loaded", function(e) { map.fitBounds(e.target.getBounds()); });
+
+map.addLayer(track);
