@@ -24,3 +24,5 @@ Setting up Tabletop
 Plugins
 ===========
 * You can also use [Leaflet plugins](http://leafletjs.com/plugins.html‎) with the map. One example is the [Leaflet.markercluster plugin](https://github.com/Leaflet/Leaflet.markercluster), which clusters markers that are close together. You can see an example of this [here](http://csessig86.github.io/tabletop_to_leaflet#cluster).
+
+used: https://github.com/shramov/leaflet-plugins
